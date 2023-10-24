@@ -21,6 +21,9 @@ if [[ -f "/data/adb/box/scripts/box.service" ]]; then
       /data/adb/box/scripts/box.service stop && \
       /data/adb/box/scripts/box.tproxy disable
       ;;
+    restart)
+      /data/adb/box/scripts/box.service restart
+      ;;
     status)
       /data/adb/box/scripts/box.service status
       ;;
@@ -29,7 +32,7 @@ if [[ -f "/data/adb/box/scripts/box.service" ]]; then
         printf "\033[31mError: Unknown command $@.\n\033[0m"
         printf "\n"
       fi
-      print "Usage: $(basename $0) [start|stop|status]\n\nCOMMAND:\n\tstart\tStart the box service.\n\tstop\tStop the box service.\n\tstatus\tView box service status.\n"
+      print "Usage: $(basename $0) [start|stop|restart|status]\n\nCOMMAND:\n\tstart\t\tStart the box service.\n\tstop\t\tStop the box service.\n\trestart\t\tRestart box.\n\tstatus\t\tView box service status.\n"
       ;;
   esac
 fi
