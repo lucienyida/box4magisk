@@ -1,0 +1,35 @@
+#!/system/bin/sh
+
+if [[ $(id -u) != 0 ]]; then
+  for SU in /sbin/su /system/xbin/su /system/bin/su; do
+    if [[ -x "$SU" && -n "$(command -v su)" ]]; then
+      exec su -c "$(command -v "$0")" "$@"
+      exit
+    fi
+  done
+  printf "Please execute using root.\n"
+  exit -1
+fi
+
+if [[ -f "/data/adb/box/scripts/box.service" ]]; then
+  case $1 in
+    start)
+      /data/adb/box/scripts/box.service start && \
+      /data/adb/box/scripts/box.tproxy enable
+      ;;
+    stop)
+      /data/adb/box/scripts/box.service stop && \
+      /data/adb/box/scripts/box.tproxy disable
+      ;;
+    status)
+      /data/adb/box/scripts/box.service status
+      ;;
+    *)
+      if [[ -n "$@" ]]; then
+        printf "\033[31mError: Unknown command $@.\n\033[0m"
+        printf "\n"
+      fi
+      print "Usage: $(basename $0) [start|stop|status]\n\nCOMMAND:\n\tstart\tStart the box service.\n\tstop\tStop the box service.\n\tstatus\tView box service status.\n"
+      ;;
+  esac
+fi
